@@ -2,61 +2,71 @@
 
   return {
     events: {
+      'userGetRequest.done': 'this.showInfo',
+      'userGetRequest.fail': 'this.showError',
       'app.activated':'getInfo',
-	  'userGetRequest.done': 'this.showInfo',
-	  'userGetRequest.fail': 'this.showError'
-    },
-	
-	requests: {
-		
-	  orgGetRequest: function(id) {
-		return {
-		  url: '/api/v2/organizations/' + id + '.json',
-		  type:'GET',
-		  dataType: 'json'
-		};
-	  },
-	  
-	  userGetRequest: function(id) {
-		return {
-		  url: '/api/v2/users/' + id + '.json',
-		  type:'GET',
-		  dataType: 'json'
-		};
+	  'click #hide': function(e){
+		  console.log(e.currentTarget);
 	  }
-	},
-	
-	getInfo : function(){
-		var id = JSON.stringify(this.ticket().requester().id()); //using data API to get id of agent
-		this.ajax('userGetRequest', id); //sample rest get to data api for more user info
-	},
-	
-    showInfo: function(data) {
-		
-		if (data.user.organization_id == null) {
+    },
 
-		  } else {
-			//make ajax requester
-			this.ajax('orgGetRequest', data.user.organization_id).then(
+    requests: {
+      userGetRequest: function(id) {
+        return {
+          url: '/api/v2/users/' + id + '.json',
+          type:'GET',
+          dataType: 'json'
+        };
+      },
+      orgGetRequest: function(id) {
+        return {
+          url: '/api/v2/organizations/' + id + '.json',
+          type:'GET',
+          dataType: 'json'
+        };
+      }
+    },
 
-			  function(org_data) {
-				data.user.organization_name = org_data.organization.name;
-				this.switchTo('requester', data);
-			  },
+    formatDates: function(data) {
+      var cdate = new Date(data.user.created_at);
+      var ldate = new Date(data.user.last_login_at);
+      data.user.created_at = cdate.toLocaleDateString();
+      data.user.last_login_at = ldate.toLocaleString();
+      return data;
+    },
 
-			  function() {
-				this.showError();
-			  }
-
-			);
-
-		  }
-		  
+    getInfo: function() {
+      var id = this.ticket().requester().id();
+      this.ajax('userGetRequest', id);
     },
 	
-	showError: function(){
-		this.switchTo('error');
-	}
+	hideCompany: function(){
+			this.$(".slidingDiv").slideToggle();
+			this.$(".icon-minus, .icon-plus").toggleClass("icon-minus icon-plus");
+	},
+
+    showInfo: function(data) {
+
+      this.formatDates(data);
+      if (data.user.organization_id == null) {
+        this.switchTo('requester', data);
+      } else {
+        this.ajax('orgGetRequest', data.user.organization_id).then(
+    	  function(org_data) {
+    		data.user.organization_name = org_data.organization.name;
+    		this.switchTo('requester', data);
+    	  },
+    	  function() {
+    		this.showError();
+    	  }
+        );
+      }
+    },
+
+    showError: function() {
+      this.switchTo('error');
+    },
+
   };
 
 }());

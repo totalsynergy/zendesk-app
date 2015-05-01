@@ -1,10 +1,99 @@
+<h4>Personal</h4>
 <table>
 <tr>
   <td>Profile:</td>
-  <td class="green"><a href="../../users/{{user.id}}" target="_blank">{{user.name}}</a></td>
+  <td>{{user.name}}</td>
 </tr>
 <tr>
-  <td>Organization:</td>
-  <td class="green">{{user.organization_name}}</td>
+  <td>Primary Email:</td>
+  <td>adamhannigan@hotmail.com</td>
 </tr>
+<tr>
+  <td>Secondary Emails:</td>
+  <td>adamhannigan@hotmail.com</td>
+</tr>
+<tr>
+  <td>Phone Number:</td>
+  <td>9999 9999</td>
+</tr>
+<tr>
+  <td>Country</td>
+  <td>Australia</td>
+</tr>
+<tr>
+  <td>State</td>
+  <td>NSW</td>
+</tr>
+<tr>
+  <td>TimeZone</td>
+  <td>UTC</td>
+</tr>
+<tr>
+  <td>Display Language</td>
+  <td>English</td>
+</tr>
+
 </table>
+
+<h4>Company</h4>
+
+<div id="hide">
+	<p class="companyName">{{user.organization_name}}</p>
+	<class="glyphicon glyphicon-plus"></i>
+	<i class="icon-plus"></i> 
+</div>
+
+<div class="companyDiv company slidingDiv">
+	<table>
+		<tr>
+		  <td>Company Type:</td>
+		  <td>Engineering</td>
+		</tr>
+		<tr>
+		  <td>Product:</td>
+		  <td>Basic</td>
+		</tr>
+		<tr>
+		  <td>Amount of Users:</td>
+		  <td>89</td>
+		</tr>
+		<tr>
+		  <td>Storage:</td>
+		  <td>400GB</td>
+		</tr>
+		<tr>
+		  <td>Expiration:</td>
+		  <td>4-10-2017</td>
+		</tr>
+		<tr>
+		  <td>Expired:</td>
+		  <td>No</td>
+		</tr>
+		<tr>
+		  <td>Skype:</td>
+		  <td>adam@skype.com</td>
+		</tr>
+		<tr>
+		  <td>Website:</td>
+		  <td>www.twitch.com</td>
+		</tr>
+		<tr>
+		  <td>Phone:</td>
+		  <td>02 9918 4040</td>
+		</tr>
+		<tr>
+		  <td>Country:</td>
+		  <td>Australia</td>
+		</tr>
+		<tr>
+		  <td>Address:</td>
+		  <td>4 James Place North Sydney</td>
+		</tr>
+		<tr>
+		  <td>Company Ranking:</td>
+		  <td>B1</td>
+		</tr>
+	</table>
+</div>
+
+
