@@ -1,0 +1,10 @@
+<table>
+<tr>
+  <td>Profile:</td>
+  <td class="green"><a href="../../users/{{user.id}}" target="_blank">{{user.name}}</a></td>
+</tr>
+<tr>
+  <td>Organization:</td>
+  <td class="green">{{user.organization_name}}</td>
+</tr>
+</table>
