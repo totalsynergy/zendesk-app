@@ -1,50 +1,61 @@
+<header>
+  <h2 class="text-center">Geoffery Rush</h3>
+  {{#if user.photo}}
+	<img src={{user.photo.content_url}} id="profilePicture">
+  {{/if}}
+</header>
+
 <h4>Personal</h4>
-<table>
-<tr>
-  <td>Profile:</td>
-  <td>{{user.name}}</td>
-</tr>
-<tr>
-  <td>Primary Email:</td>
-  <td>adamhannigan@hotmail.com</td>
-</tr>
-<tr>
-  <td>Secondary Emails:</td>
-  <td>adamhannigan@hotmail.com</td>
-</tr>
-<tr>
-  <td>Phone Number:</td>
-  <td>9999 9999</td>
-</tr>
-<tr>
-  <td>Country</td>
-  <td>Australia</td>
-</tr>
-<tr>
-  <td>State</td>
-  <td>NSW</td>
-</tr>
-<tr>
-  <td>TimeZone</td>
-  <td>UTC</td>
-</tr>
-<tr>
-  <td>Display Language</td>
-  <td>English</td>
-</tr>
+<div class="infoHolder">
+	<table class="table-striped">
+		<tr>
+		  <td>Profile:</td>
+		  <td>{{user.name}}</td>
+		</tr>
+		<tr>
+		  <td>Primary Email:</td>
+		  <td>{{user.email}}</td>
+		</tr>
+		<tr>
+		  <td>Secondary Emails:</td>
+		  <td>adamhannigan@hotmail.com</td>
+		</tr>
+		<tr>
+		  <td>Phone Number:</td>
+		  <td>9999 9999</td>
+		</tr>
+		<tr>
+		  <td>Country</td>
+		  <td>Australia</td>
+		</tr>
+		<tr>
+		  <td>State</td>
+		  <td>NSW</td>
+		</tr>
+		<tr>
+		  <td>TimeZone</td>
+		  <td>UTC</td>
+		</tr>
+		<tr>
+		  <td>Display Language</td>
+		  <td>English</td>
+		</tr>
 
-</table>
-
-<h4>Company</h4>
-
-<div id="hide">
-	<p class="companyName">{{user.organization_name}}</p>
-	<class="glyphicon glyphicon-plus"></i>
-	<i class="icon-plus"></i> 
+	</table>
 </div>
 
-<div class="companyDiv company slidingDiv">
-	<table>
+<h4>Organizations</h4>
+
+<div class="infoHolder">
+{{#each orgs}}
+	<div class="genCompany" id="{{.}}">
+		<p class="companyName">{{.}}</p>
+		<class="glyphicon glyphicon-plus"></i>
+		<i class="icon-plus {{.}}mathSymbol"></i> 
+	</div>
+	
+	<div class="company {{.}} infoHolder">
+	<table class="table-striped">
 		<tr>
 		  <td>Company Type:</td>
 		  <td>Engineering</td>
@@ -82,12 +93,12 @@
 		  <td>02 9918 4040</td>
 		</tr>
 		<tr>
-		  <td>Country:</td>
-		  <td>Australia</td>
-		</tr>
-		<tr>
 		  <td>Address:</td>
 		  <td>4 James Place North Sydney</td>
+		</tr>
+		<tr>
+		  <td>Country:</td>
+		  <td>Australia</td>
 		</tr>
 		<tr>
 		  <td>Company Ranking:</td>
@@ -95,5 +106,16 @@
 		</tr>
 	</table>
 </div>
+	
+{{/each}}
+</div>
+
+<form>
+	Synergy 5 Key:
+	<input type="text"placeholder="Enter Key">
+	<input type="submit" value="Submit" id="submitButton">
+</form>
+
+
 
 

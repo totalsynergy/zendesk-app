@@ -1,5 +1,24 @@
-.green {
-	color: #363;
+.infoHolder{
+	margin: 10px 0px;
+}
+
+h2 {
+  font-size: 20px;
+  line-height: 45px;
+  float:left;
+}
+
+header{
+	border: none !important;
+}
+
+#profilePicture{
+	 float: right;
+ 	 position: relative;
+  	 top: -5px;
+ 	 width: 50px;
+ 	 border-radius: 4px;
+  	height: 50px;
 }
 
 .company{
@@ -23,8 +42,30 @@
 h4{
 	padding-bottom:10px;
 	padding-top:10px;
+	background: #f7f7f7;
+  	border-bottom: solid 1px #c0c0c0;
+  	text-align: center;
+  	border-top: solid 1px #c0c0c0;
 }
 
 td{
 	padding-right: 10px;
+}
+
+.genCompany:hover{
+	cursor: pointer;
+}
+
+.genCompany{
+	margin-bottom:15px;
+  	border-bottom: 1px solid #ECECEC;
+}
+
+.hide:hover{
+	cursor:pointer;
+}
+
+.icon-plus, .icon-minus{
+  float: right;
+  margin-right: 10px;
 }

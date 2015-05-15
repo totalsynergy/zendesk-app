@@ -1,12 +1,22 @@
 (function() {
 
   return {
+	
+	loading: false,
+	
     events: {
       'userGetRequest.done': 'this.showInfo',
       'userGetRequest.fail': 'this.showError',
       'app.activated':'getInfo',
-	  'click #hide': function(e){
-		  console.log(e.currentTarget);
+	  'click' : function(){ console.log("Clikcl worked");},
+	  'click .genCompany': function(e){
+		  console.log("Hiding");
+		  console.log(e.currentTarget.id);
+		  this.hideCompany(e.currentTarget.id);
+	  },
+	  'submit #submitButton' : function(e){
+		  console.log("submit Button hit");
+		  //get e.value and log
 	  }
     },
 
@@ -40,9 +50,11 @@
       this.ajax('userGetRequest', id);
     },
 	
-	hideCompany: function(){
-			this.$(".slidingDiv").slideToggle();
-			this.$(".icon-minus, .icon-plus").toggleClass("icon-minus icon-plus");
+	hideCompany: function(className){
+			console.log("Try Slide: " + className);
+			this.$("." + className).slideToggle();
+			//this.$(".icon-minus, .icon-plus").toggleClass("icon-minus icon-plus");
+			this.$("." + className + "mathSymbol").toggleClass("icon-minus icon-plus");
 	},
 
     showInfo: function(data) {
@@ -53,8 +65,11 @@
       } else {
         this.ajax('orgGetRequest', data.user.organization_id).then(
     	  function(org_data) {
+			var testOrgs = {orgs: ["Sunny","InternsRUs","YoYoYo"]};
     		data.user.organization_name = org_data.organization.name;
-    		this.switchTo('requester', data);
+			//replaced data
+    		this.switchTo('requester', testOrgs);
+			this.$("#spinner").hide();
     	  },
     	  function() {
     		this.showError();
