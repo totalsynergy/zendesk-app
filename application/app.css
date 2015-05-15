@@ -69,3 +69,8 @@ td{
   float: right;
   margin-right: 10px;
 }
+
+.keyHolder{
+	margin: 10px auto;
+  	width: 56%;
+}

@@ -110,11 +110,10 @@
 {{/each}}
 </div>
 
-<form>
-	Synergy 5 Key:
-	<input type="text"placeholder="Enter Key">
-	<input type="submit" value="Submit" id="submitButton">
-</form>
+<div class="keyHolder">
+	<input type="text" id="inputKey" placeholder="Synergy 5 Key">
+	<button type="button" id="submitKey" class="btn">Submit</button>
+</div>
 
 
 
