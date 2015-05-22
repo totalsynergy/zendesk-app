@@ -1,7 +1,7 @@
 <header>
-  <h2 class="text-center">Geoffery Rush</h3>
-  {{#if user.photo}}
-	<img src={{user.photo.content_url}} id="profilePicture">
+  <h2 class="text-center">{{Person.FirstName}} {{Person.LastName}}</h3>
+  {{#if Basic.Photo}}
+	<img src={{Basic.Photo}} id="profilePicture">
   {{/if}}
 </header>
 
@@ -10,35 +10,41 @@
 	<table class="table-striped">
 		<tr>
 		  <td>Profile:</td>
-		  <td>{{user.name}}</td>
+		  <td>{{Person.FirstName}} {{Person.LastName}}</td>
 		</tr>
 		<tr>
 		  <td>Primary Email:</td>
-		  <td>{{user.email}}</td>
+		  <td>{{Person.PrimaryEmail}}</td>
 		</tr>
+		{{#each Person.SecondaryEmails}}
 		<tr>
 		  <td>Secondary Emails:</td>
-		  <td>adamhannigan@hotmail.com</td>
+		  <td>{{.}}</td>
+		</tr>
+		{{/each}}
+		<tr>
+		  <td>Phone No:</td>
+		  <td>{{Person.PhoneNumber}}</td>
 		</tr>
 		<tr>
-		  <td>Phone Number:</td>
-		  <td>9999 9999</td>
+		  <td>Mobile No:</td>
+		  <td>{{Person.MobileNumber}}</td>
 		</tr>
 		<tr>
 		  <td>Country</td>
-		  <td>Australia</td>
+		  <td>{{Person.Country}}</td>
 		</tr>
 		<tr>
 		  <td>State</td>
-		  <td>NSW</td>
+		  <td>{{Person.State}}</td>
 		</tr>
 		<tr>
 		  <td>TimeZone</td>
-		  <td>UTC</td>
+		  <td>{{Person.TimeZone}}</td>
 		</tr>
 		<tr>
 		  <td>Display Language</td>
-		  <td>English</td>
+		  <td>{{Person.DisplayLanguage}}</td>
 		</tr>
 
 	</table>
@@ -47,62 +53,68 @@
 <h4>Organizations</h4>
 
 <div class="infoHolder">
-{{#each orgs}}
-	<div class="genCompany" id="{{.}}">
-		<p class="companyName">{{.}}</p>
+{{#each Company}}
+	<div class="genCompany" id="{{this.QuickLinks}}">
+		<p class="companyName">{{this.CompanyName}}</p>
 		<class="glyphicon glyphicon-plus"></i>
-		<i class="icon-plus {{.}}mathSymbol"></i> 
+		<i class="icon-plus {{this.QuickLinks}}mathSymbol"></i> 
 	</div>
 	
-	<div class="company {{.}} infoHolder">
+	<div id="company" class="{{ this.QuickLinks}}">
 	<table class="table-striped">
 		<tr>
 		  <td>Company Type:</td>
-		  <td>Engineering</td>
+		  <td>{{this.CompanyType}}</td>
 		</tr>
 		<tr>
 		  <td>Product:</td>
-		  <td>Basic</td>
+		  <td>{{this.Subscription.Product}}</td>
 		</tr>
 		<tr>
 		  <td>Amount of Users:</td>
-		  <td>89</td>
+		  <td>{{this.Subscription.Users}}</td>
 		</tr>
 		<tr>
 		  <td>Storage:</td>
-		  <td>400GB</td>
+		  <td>{{this.Subscription.Storage}}</td>
 		</tr>
 		<tr>
 		  <td>Expiration:</td>
-		  <td>4-10-2017</td>
+		  <td>{{this.Subscription.Expiry}}</td>
 		</tr>
 		<tr>
 		  <td>Expired:</td>
-		  <td>No</td>
+		  <td>
+			{{#if this.Subscription.Expired}}
+				True
+			{{else}}
+				False
+			{{/if}}
+		  </td>
 		</tr>
 		<tr>
 		  <td>Skype:</td>
-		  <td>adam@skype.com</td>
+		  <td>{{this.SkypeName}}</td>
 		</tr>
 		<tr>
 		  <td>Website:</td>
-		  <td>www.twitch.com</td>
+		  <td>{{this.Website}}</td>
 		</tr>
 		<tr>
 		  <td>Phone:</td>
-		  <td>02 9918 4040</td>
+		  <td>{{this.PhoneNumber}}</td>
 		</tr>
 		<tr>
 		  <td>Address:</td>
-		  <td>4 James Place North Sydney</td>
+		  <td>{{this.Address}}</td>
 		</tr>
 		<tr>
 		  <td>Country:</td>
-		  <td>Australia</td>
+		  <td>{{this.Country}}</td>
 		</tr>
 		<tr>
-		  <td>Company Ranking:</td>
-		  <td>B1</td>
+		  <td>Quick Link:</td>
+		  <td>{{this.QuickLinks}}</td>
 		</tr>
 	</table>
 </div>
@@ -114,6 +126,17 @@
 	<input type="text" id="inputKey" placeholder="Synergy 5 Key">
 	<button type="button" id="submitKey" class="btn">Submit</button>
 </div>
+
+<button type="button" id="getCard" class="btn">Get Card</button>
+
+<div class="keyHolder2">
+	<input type="text" id="inputTrelloAuth" placeholder="Trello Auth Key">
+	<button type="button" id="submitAuthTrello" class="btn">Save Token</button>
+</div>
+
+<a href="https://trello.com/1/authorize?key=d04c9c2bd2be123721cdbf17f78f5c20&name=My+Application&expiration=30days&response_type=token&scope=read,write" target="_blank"> 
+	<button type="button" id="authorizeTrello" class="btn">AuhtorizeTrello</button>
+</a>
 
 
 
