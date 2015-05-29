@@ -77,29 +77,92 @@ td{
 
 .keyHolder{
 	margin: 10px auto;
-  	width:80%;
 }
 
 .keyHolder2{
 	margin: 10px auto;
-  	width:90%;
 }
 
 #inputKey{
-	width:57%;
+	width: 65%;
+  	margin-left: 0;
 }
 
 #inputTrelloAuth{
-	width:51%
+	width:65%
 }
+
+#submitKey, #submitAuthTrello{
+  width: 30%;
+} 
 
 #authorizeTrello{
 	width:100%;
 }
 
-#getCard{
-	background: #0B6294;
-	color: #fff;
-	width:50%;
-	margin-left:25%;
+#getCard, #postCard{
+  background: #0B6294;
+  color: #fff;
+  width: 50%;
+  margin-left: 25%;
+  height: 40px;
+  font-size: 14px;
+}
+
+#trello{
+  text-align: center;
+  color: #27B4B9;
+}
+
+#trelloHolder{
+   background: #F9F9F9;
+  border-radius: 9px;
+  border: solid 1px #D5D5D5;
+  box-shadow: 2px 2px 1px 0px rgba(0,0,0,0.45);
+}
+
+#trelloName{
+  display:inline;
+  margin: 5px;
+
+}
+
+#trelloPercentage{
+  display:inline;
+  color: #777;
+  font-size: 16px;
+}
+
+#trelloLabel{
+  height:10px;
+  width:30px;
+  margin:0px 5px 5px 5px;
+  float:left;
+  border-radius:3px;
+}
+
+#trelloDescription{
+  display: block;
+  margin: 20px 0px;
+  padding-top: 5px;
+  border-top: solid 1px #c0c0c0;
+  margin: 20px 0px 5px 5px;
+line-height: 35px;
+}
+
+.marginLeft{
+	margin-left:5px;
+}
+
+#trelloLink{
+  font-size: 12px;
+}
+
+#trelloDate{
+}
+
+.trelloValue{
+	margin: 15px 5px;
+	margin-left:5px;
+	display:inline;
 }

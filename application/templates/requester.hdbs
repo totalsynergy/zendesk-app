@@ -122,12 +122,33 @@
 {{/each}}
 </div>
 
-<div class="keyHolder">
-	<input type="text" id="inputKey" placeholder="Synergy 5 Key">
-	<button type="button" id="submitKey" class="btn">Submit</button>
-</div>
+{{#if CardNumber}}
 
-<button type="button" id="getCard" class="btn">Get Card</button>
+	<button type="button" id="getCard" class="btn">Get Card</button>
+	
+	{{else}}
+		<button type="button" id="postCard" class="btn">Escalate Card</button>
+		
+{{/if}}
+
+{{#if Card}}
+	<div id="trelloHolder">
+		<h3 id="trelloName">{{Card.name}}</h3>
+		{{#if Card.closed}}
+			closed
+			{{else}}
+				<p id="trelloPercentage">{{Card.percentage}}%</p>
+		{{/if}}
+		
+		{{#each Card.labels}}
+			<div id="trelloLabel" title="{{this.name}}" style="background: {{this.color}}"></div>
+		{{/each}}
+		<br>
+		<p id="trelloDescription" class="trelloValue">Current State: 2nd Level Support</p>
+		<p id="trelloValue"></p>
+		<p class="trelloValue">Link: <a href="{{Card.url}}" target="_blank">{{Card.url}}</a> </p>
+	</div>
+{{/if}}
 
 <div class="keyHolder2">
 	<input type="text" id="inputTrelloAuth" placeholder="Trello Auth Key">
@@ -135,8 +156,13 @@
 </div>
 
 <a href="https://trello.com/1/authorize?key=d04c9c2bd2be123721cdbf17f78f5c20&name=My+Application&expiration=30days&response_type=token&scope=read,write" target="_blank"> 
-	<button type="button" id="authorizeTrello" class="btn">AuhtorizeTrello</button>
+	<button type="button" id="authorizeTrello" class="btn">Get Authorization Key</button>
 </a>
+
+<div class="keyHolder">
+	<input type="text" id="inputKey" placeholder="Synergy 5 Key">
+	<button type="button" id="submitKey" class="btn">Submit</button>
+</div>
 
 
 
