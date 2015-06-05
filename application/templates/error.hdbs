@@ -1,7 +1,6 @@
 <p>There was a problem accessing the data.</p>
-<p>After 30 Days zendesk local storage expires the Synergy Key. This may
-be the problem so please re-enter the key.</p>
 
+<h4>{{message}}</h4>
 <div class="keyHolder">
 	<input type="text" id="inputKey" placeholder="Synergy 5 Key">
 	<button type="button" id="submitKey" class="btn">Submit</button>

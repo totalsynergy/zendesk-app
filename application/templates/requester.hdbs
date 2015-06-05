@@ -140,13 +140,17 @@
 				<p id="trelloPercentage">{{Card.percentage}}%</p>
 		{{/if}}
 		
+		<div id="labelHolder">
 		{{#each Card.labels}}
 			<div id="trelloLabel" title="{{this.name}}" style="background: {{this.color}}"></div>
 		{{/each}}
+		</div>
 		<br>
-		<p id="trelloDescription" class="trelloValue">Current State: 2nd Level Support</p>
-		<p id="trelloValue"></p>
-		<p class="trelloValue">Link: <a href="{{Card.url}}" target="_blank">{{Card.url}}</a> </p>
+		<p class="trelloAttribute">Current State: </p><p class="trelloValue">{{Card.currentState}}</p><br>
+		<p class="trelloAttribute">{{Card.commenter}}: </p><p class="trelloValue">{{Card.comment}}</p><br>
+		<a href="{{Card.url}}" target="_blank" class="trelloValue">
+			<button type="button" class="btn" id="goToTrello">Open in Trello</button>
+		</a>
 	</div>
 {{/if}}
 

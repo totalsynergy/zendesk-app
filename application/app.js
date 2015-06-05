@@ -10,12 +10,11 @@
 	trelloAppKey : '',
 	trelloUserAuth: '',
 	synergyData: {},
+	listNames: [],
 	
 	//Similar to callbacks in ajax requests
     events: {
-	  'app.activated':'this.getImage',
-	  'userGetRequest.done' : 'this.getCardTagNumber',
-	  'getCardNumber.done' : 'this.showInfo',
+	  'app.activated':'this.fetchAgentData',
 	  'click .genCompany': function(e){
 		  this.hideCompany(e.currentTarget.id);
 	  },
@@ -26,23 +25,17 @@
     },
 
     requests: {
-	  //Zen Desk API to get users email
-      userGetRequest: function(id) {
+		
+	  //Zen Desk API to get users info
+      getUserInfo: function(id) {
         return {
           url: '/api/v2/users/' + id + '.json',
           type:'GET',
           dataType: 'json'
         };
       },
-	  //Testing to get ticket organization data
-      orgGetRequest: function(id) {
-        return {
-          url: '/api/v2/organizations/' + id + '.json',
-          type:'GET',
-          dataType: 'json'
-        };
-      },
-	  //Get user synergy organization information
+	  
+	  //Get User Synergy Information
 	  synergy5Feed: function(key, email) {
         return {
           url: 'https://beta.totalsynergy.com/internalkpi/totalsynergy/summary/zendeskfeed?internal-token=' + key,
@@ -51,33 +44,25 @@
 		  data: {"Email" : email}
         };
 	  },
+	  
 	  //Post Trello Card to listID
-	  //List ID for 2nd Level - 5567b292253bf481c1b25bcc
-	  //Using boards/5567b292253bf481c1b25bcc/lists to get - could use sorting 
-	  //strangely the parameters get passed in query not data body
-	  postCard: function(card){
+	  postCard: function(card, appKey, userToken){
 		  return{
-			url: 'https://api.trello.com/1/lists/5567b292253bf481c1b25bcc/cards?name=' + card.name + '&desc=' + card.desc + '&due=' + card.due + '&key=' + this.trelloAppKey + '&token=' + this.trelloUserAuth,
-			//url: 'https://api.trello.com/1/boards/Wsp49XKC/lists?key=' + this.trelloAppKey + '&token=' + this.trelloUserAuth,
+			url: 'https://api.trello.com/1/lists/5567b292253bf481c1b25bcc/cards?name=' + card.name + '&desc=' + card.desc + '&due=' + card.due + '&key=' + appKey + '&token=' + userToken,
 			type:'POST'
 		  }
       },
+	  
+	  //Get Trello Card using cardID
 	  getTrelloCard: function(cardId){
 		  return{
-			url: 'https://api.trello.com/1/cards/' + cardId + '?key=' + this.trelloAppKey + '&token=' + this.trelloUserAuth,
+			url: 'https://api.trello.com/1/cards/' + cardId + '?list=true&actions=commentCard&key=' + this.trelloAppKey + '&token=' + this.trelloUserAuth,
 			type:'GET'
 		  }
 	  },
-	  //Get list of trello cards
-	  getListOfCards: function(userToken){
-		  return{
-			url: 'https://api.trello.com/1/boards/Wsp49XKC/cards?key=d04c9c2bd2be123721cdbf17f78f5c20&token=' + userToken,
-			type:'GET',
-			dataType: 'json'
-		  }
-	  },
-	  //Used to retrieve the synergy Key needed to access synergy 5 Feed
-	  getSyn5Key: function(dailyCode){
+	  
+	  //Retrieve Synergy Keys - Trello Application and Syn 5 Beta
+	  getSynergyKey: function(dailyCode){
 		  return{
 		    url: 'https://beta.synergycloudapp.com/totalsynergy/InternalKpi/Home/keys?codefortoday=' + dailyCode,
 			type:'GET',
@@ -85,36 +70,31 @@
 		  }
 	  },
 	  
-	  getCardNumber: function(){
+	  //Save Keys to Account API
+	  saveKeys : function(synKey, tAppKey, id){
 		  return{
-		    url: '/api/v2/ticket_fields.json',
-			type:'GET'
-		  }
+		    url: '/api/v2/users/' + id + '.json',
+			type:'PUT',
+			data: 	{"user": {"user_fields": { "synergy_5_key" : synKey, "trello_application_key" : tAppKey}}}
+		  };
+	  },
+	  
+	  //Save user Token to Account API
+	  storeTrelloAuth : function(authKey, id){
+		  return{
+		    url: '/api/v2/users/' + id + '.json',
+			type:'PUT',
+			data: 	{"user": {"user_fields": { "trello_user_token" : authKey}}}
+		  };
 	  }
 	  
-	  /* Below Code to get there multiple emails 
-	  getIdentities : function(id){
-		  return {
-          url: '/api/v2/users/'+ id + '/identities.json',
-          type:'GET',
-          dataType: 'json'
-        };
-	  }
-	  */
     },
 	
 	//Use Zendesk API feed to get user photo
-	getImage: function()
+	getTicketImage: function()
 	{
-		//Key information
-		
-		console.log("Synergy Key: " + this.store('key'));
-		console.log("Trello App Key:" + this.store('trelloAppKey'));
-		console.log("Trello User Key:" + this.store('trelloUserAuth'));
-		
-		
-		//End Key Information
-		this.ajax('userGetRequest', this.ticket().requester().id() ).then(
+		//Regardless of whether we get image still try get rest of information
+		this.ajax('getUserInfo', this.ticket().requester().id() ).then(
 			//success
 			function(d)
 			{
@@ -122,72 +102,102 @@
 					this.basicData = {"Name" : d.user.name, "Photo" : d.user.photo.content_url};
 				else
 					this.basicData = {"Name" : d.user.name};
+				
+				this.showInfo();
 			},
 			//failed
 			function(d)
 			{
 				console.log("Did not get user info");
+				this.showInfo();
+			}
+		);
+	},
+	
+	//Access the current user's fields
+	fetchAgentData : function(){
+		this.ajax('getUserInfo', this.currentUser().id()).then(
+			function(data)
+			{
+				//console.log("\n \n /n Got agent data: " + JSON.stringify(data));
+				var fields = data.user.user_fields;
+				//console.log("Keys are: " + JSON.stringify(fields));
+				
+				this.synergyKey = fields.synergy_5_key;
+				this.trelloAppKey = fields.trello_application_key;
+				this.trelloUserAuth = fields.trello_user_token;				
+				
+				this.getTicketImage();
+
+			},
+			function(error)
+			{
+				console.log("Could Not Access Zendesk User API");
 			}
 		);
 	},
 
-	//Attempt to get user's synergy 5 feed and display
+	//Get Synergy Data and render Template
 	showInfo: function() {
-		
-		//will test if trello card exists
-			
-		
-		if(this.store('key'))
-		    var key = this.store('key');
-		
-		console.log("Make request with emails: " + this.ticket().requester().email());
-	    this.ajax('synergy5Feed', key, this.ticket().requester().email()).then(
+
+	    this.ajax('synergy5Feed', this.synergyKey, this.ticket().requester().email()).then(
 			//if success render Page
 			function(data)
 			{
-				//N.B This will still return a success if the user does not have email > Make another
-				//template to handle this error
-				
-				//Append Zendesk User info such as photo
-				var dataToPass = data.data;
-				dataToPass.Basic = this.basicData;
-				
-				//determines whether to pass get card or escalte card
-				if(this.ticket().customField("custom_field_22941890") != '')
-					dataToPass.CardNumber = true;
-				
-				this.synergyData = dataToPass;
-				this.switchTo('requester', dataToPass);
+				//If email was found
+				if(data.data)
+				{
+					//Append Zendesk User info such as photo
+					var dataToPass = data.data;
+					dataToPass.Basic = this.basicData;
+					
+					//Determines whether 'get card' or 'escalate card' shows
+					if(this.ticket().customField("custom_field_22941890") != '')
+						dataToPass.CardNumber = true;
+					
+					this.synergyData = dataToPass;
+					this.switchTo('requester', dataToPass);
+				}
+				else   //email was not found
+				{
+					var errorMessage = {};
+					errorMessage.message = data.message;
+					this.switchTo('error', errorMessage);
+				}		
 				
 				//Remove the spinner
 				this.$("#spinner").hide();
 			},
-			//if failed
+			//Could not access synergy 5 feed
 			function(error)
 			{
-				this.switchTo('requester', data);
+				var errorMessage = {};
+				errorMessage.message = "Could Not Access Synergy Server" + ": " + error.statusText;
+				this.switchTo('error', errorMessage);
 				this.$("#spinner").hide();
 			}
 		) ;
 	},
 	
-	//User Input to save daily code for synergy - if success will save key in local storage
+	//Save Keys to User API
 	saveKey: function(){
+		
 		var dailyCode = this.$('#inputKey').val();
-		console.log("Key: " + dailyCode);
 		
 		//Test if user accidentally presses button without typing anything
-		if(key != '')
+		if(dailyCode != '')
 		{
-			this.ajax('getSyn5Key', dailyCode).then(
-				//got key
+			this.ajax('getSynergyKey', dailyCode).then(
+				//Daily Code Worked
 				function(d)
 				{
-					if(d.data.length > 0){
+					//If key properly worked length will be > 0
+					if(d.data){
 						var key = '';
 						var trelloAppKey = '';
 						console.log(JSON.stringify(d));
-						//Loop through to find just in case there is a change
+						
+						//Loop through and match keys
 						for(var i = 0; i < d.data.length; i++)
 						{
 							if(d.data[i].Key == "Synergy 5 Key"){
@@ -199,15 +209,14 @@
 								trelloAppKey = d.data[i].Value;						
 							}
 						}
-						console.log("Storing synergyKey: " + key);
-						this.store('synergyKey', key);
-						console.log("Storing trello app key: " + trelloAppKey);
-						this.store('trelloAppKey', trelloAppKey);
-						console.log("Key: " + key);
-						this.$('#inputKey').val('Key Worked');
+						
+						//Now Save these individual keys to user API
+						this.sendKeyToUserAPI(key, trelloAppKey);
 					}
+					else
+						this.$('#inputKey').val('Key Failed');
 				},
-				//didnt get key
+				//Daily Code Did Not Work
 				function(d)
 				{
 					this.$('#inputKey').val('Key Failed');
@@ -217,29 +226,55 @@
 		}
 	},
 	
-	//Save trello authorization in local storage
+	//Send Synergy/Trello Application Key to User API
+	sendKeyToUserAPI : function(synKey, trelloAppKey){
+		this.ajax('saveKeys', synKey, trelloAppKey, this.currentUser().id()).then(
+			//keys saved 
+			function(data)
+			{
+				this.$('#inputKey').val('Key Worked');
+			},
+			//keys not saved
+			function(error)
+			{
+				this.$('#inputKey').val('Key Failed');
+			}
+		);
+	},
+	
+	//Save trello user token to user API
 	saveTrelloAuth: function(){
-		var auth = this.$('#inputTrelloAuth').val();
-		console.log("Auth: " + auth);
 		
+		var auth = this.$('#inputTrelloAuth').val();
+		
+		//Prevents User accidentally clicking button and saving key
 		if(auth != '')
 		{
-			this.store('trelloUserAuth', auth);
+			this.ajax('storeTrelloAuth', auth, this.currentUser().id()).then(
+				//key saved
+				function(data)
+				{
+					this.$('#inputTrelloAuth').val('Key Saved');
+				},
+				//something went wrong
+				function(error)
+				{
+					this.$('#submitAuthTrello').val('Key Not Saved');
+				}
+			);
 		}
 	},
 	
 	//Slides Companies Up and Down for viewing
-	//Using QuickLinks as Dynamic Class Name Because it has no spaces and unique
+	//N.B using quicklinks as ID since this is only unique field
 	hideCompany: function(className){
 		
 			//Cut and Slice string due to jquery searching '/' issues
 			var name = className.toString();
 			name = name.substr(8);
-			this.$("div[class*='Synergy/" + name + "']").slideToggle();
-
-			console.log("Toggle: " + "Synergy/" + name + "mathSymbol");
 			
-			//for issues with the forward slash using different jquery selectors
+			//Difficulties with forward slash
+			this.$("div[class*='Synergy/" + name + "']").slideToggle();			
 			this.$("i[class*='Synergy/" + name + "mathSymbol']").toggleClass("icon-minus icon-plus");
 	},
 
@@ -248,92 +283,90 @@
       this.switchTo('error');
     },
 	
-	getCardTagNumber : function(){
-		//ID 22941890
-		console.log("Ticket: " + this.ticket().requester().id());
-		console.log("Custom Field: " + this.ticket().customField("custom_field_22941890"));
-		
-		console.log("Custom Field: " + this.ticket().customField("custom_field_22941890"));		
-		this.showInfo();
-	},
-	
 	getCard : function(){
-		if(this.store('trelloAppKey'))
-			this.trelloAppKey = this.store('trelloAppKey');
 		
-		if(this.store('trelloUserAuth'))
-			this.trelloUserAuth = this.store('trelloUserAuth');
+		this.$("#getCard").text("Loading...");
 		
+		//Get the trello card id
 		var cardID = this.ticket().customField("custom_field_22941890");
 		
 		this.ajax('getTrelloCard', cardID).then(
-			//success
+			//Trello Card Successively Gotten
 			function(data)
 			{
-				//format card for rendering
-				console.log("Got card info");
+				//Create Card and Store certain values
 				var card = {};
 				console.log(JSON.stringify(data));
 				card.name = data.name;
 				card.desc = data.desc;
 				card.url = data.url;
 				card.labels = data.labels;
-				card.due = data.due;
 				card.closed = data.closed;
 				card.percentage = data.badges.checkItemsChecked/data.badges.checkItems*100;
+				card.comment = data.actions[0].data.text;
+				card.commenter = data.actions[0].memberCreator.fullName;
+				
+				card.currentState = data.list.name;
+				
+				//Append the extra information such as Zendesk Name, Image etc.
 				var newDataToPass = this.synergyData;
 				newDataToPass.Card = card;
 				
-				
+				//Render template with trello Card
 				this.switchTo('requester', newDataToPass);
 				
 				//Must hide it now since rendered again
 				this.$("#getCard").hide();
 			},
-			//failed
+			//Could Not Get Trello Card - show error
 			function(error){
+				this.$("#trelloError").empty();
+				this.$("#getCard").after("<div id='trelloError'>Trello Card Number Cannot Be Found.<br>Card may of moved boards<br>Reset the trelloCardNumber on the left if you wish to escalate card again!</div>")
+				this.$("#getCard").hide();
+				this.$("#postCard").show();
 				console.log("Failed to get TrelloCard");
 			}
 		)
 	},
 	
+	//Escalate Trello Card
 	createCard : function(){
-		
-		if(this.store('trelloAppKey'))
-			this.trelloAppKey = this.store('trelloAppKey');
-		
-		if(this.store('trelloUserAuth'))
-			this.trelloUserAuth = this.store('trelloUserAuth');
 		
 		var card = {};
 		var ticket = this.ticket();
 		
-		var listId = '4ff4e26b97a6411d1c3927fc';
-		
+		//Will be changeable in the future
 		card.idList = '4ff4e26b97a6411d1c3927fc';
 		card.name = ticket.subject();
-		card.desc = ticket.description();
+		card.desc = " - **Ticket Description: **" + ticket.description() + " %0A";
+		card.desc += " - **Ticket Number: **" + ticket.id() + " %0A";
+		card.desc += " **Priority: **" + ticket.priority() + " %0A";
+		card.desc += " - **Companies: **";
+		
+		//Go through each company and append to list
+		for(var i = 0; i < this.synergyData.Company.length; i++)
+		{
+			card.desc += this.synergyData.Company[i].CompanyName;
+			if(i != this.synergyData.Company.length - 1)
+				card.desc += ", ";
+		}
+		
+		card.desc += " - **Link: ** https://totalsynergy.zendesk.com/agent/tickets/" + ticket.id() + " %0A";
 		card.requester = ticket.requester();
-		card.organization = ticket.organization();
-		//look into the value of the variable below
 		card.due = null;
 		
-		//Create and format trello card
-		
-		
 		//send card
-		this.ajax('postCard', card).then(
-			//posted card
+		this.ajax('postCard', card, this.trelloAppKey, this.trelloUserAuth).then(
+			//Card Posted Successively > render success message
 			function(data)
 			{
-				console.log("Card Created");
-				console.log("Card Posted: " + JSON.stringify(data));
-				//save the card id
-				//Note - User must then submit/save the ticket to save the card id
+				//Save trello card id to ticket
 				this.ticket().customField("custom_field_22941890", data.id);
-				this.$("#postCard").hide();
 				
-				//render new display
+				this.$("#postCard").hide();
+				this.$("#postCard").after('<p id="trelloError">Card has been sent. <br>Remember to save this ticket if you want to maintain connection to trello card.</p>')
+				
+				//Note - User must then submit/save the ticket to save the card id
 			},
 			//error occurred
 			function(error)
@@ -341,34 +374,7 @@
 				console.log("Could Not Create card");
 			}
 		);
-	},
-	
-	
-	/* Used to retrieve Identifiers and sort them
-	getEmails: function()
-	{
-	    //use user id for zendesk identities API request
-	    this.ajax('getIdentities', this.ticket().requester().id()).then(
-			function(d)
-			{
-				//Go through their identities and store them in email array
-				console.log("Got Identities: " + JSON.stringify(d));
-				var identities = d.identities;
-				for(var i = identities.length - 1; i >= 0; i--)
-				{
-					if(identities[i].type = "email")
-						this.emails.push(identities[i].value);
-				}
-				console.log("Emails is now: " + this.emails);
-				this.showInfo();
-			},
-			function(d)
-			{
-				console.log("No identities");
-			}
-		);
 	}
-	*/
 
   };
   

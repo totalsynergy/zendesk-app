@@ -141,15 +141,6 @@ td{
   border-radius:3px;
 }
 
-#trelloDescription{
-  display: block;
-  margin: 20px 0px;
-  padding-top: 5px;
-  border-top: solid 1px #c0c0c0;
-  margin: 20px 0px 5px 5px;
-line-height: 35px;
-}
-
 .marginLeft{
 	margin-left:5px;
 }
@@ -161,8 +152,33 @@ line-height: 35px;
 #trelloDate{
 }
 
-.trelloValue{
-	margin: 15px 5px;
+#labelHolder{
+	border-bottom: solid 1px #c0c0c0;
+	padding-bottom:15px;
+}
+
+
+
+#trelloError{
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.trelloAttribute{
+	font-weight:bold;
 	margin-left:5px;
 	display:inline;
+	line-height:26px;
+}
+
+.trelloValue{
+	 margin-left: 20px;
+}
+
+#goToTrello{
+	text-align:center;
+	width:50%;
+	margin-left:17%;
+	margin-bottom:10px;
 }
