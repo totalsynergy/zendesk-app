@@ -1,126 +1,137 @@
+{{#if errorMessage}}
+
+<p>There was a problem accessing the data.</p>
+
+<h4>{{errorMessage}}</h4>
+
+{{/if}}
+
 <header>
-  <h2 class="text-center">{{Person.FirstName}} {{Person.LastName}}</h3>
-  {{#if Basic.Photo}}
-	<img src={{Basic.Photo}} id="profilePicture">
+  <h2 class="text-center">{{synergyData.Person.FirstName}} {{synergyData.Person.LastName}}</h3>
+  {{#if basicInformation.Photo}}
+	<img src={{basicInformation.Photo}} id="profilePicture">
   {{/if}}
 </header>
 
+{{#if synergyData.Person}}
 <h4>Personal</h4>
-<div class="infoHolder">
-	<table class="table-striped">
-		<tr>
-		  <td>Profile:</td>
-		  <td>{{Person.FirstName}} {{Person.LastName}}</td>
-		</tr>
-		<tr>
-		  <td>Primary Email:</td>
-		  <td>{{Person.PrimaryEmail}}</td>
-		</tr>
-		{{#each Person.SecondaryEmails}}
-		<tr>
-		  <td>Secondary Emails:</td>
-		  <td>{{.}}</td>
-		</tr>
-		{{/each}}
-		<tr>
-		  <td>Phone No:</td>
-		  <td>{{Person.PhoneNumber}}</td>
-		</tr>
-		<tr>
-		  <td>Mobile No:</td>
-		  <td>{{Person.MobileNumber}}</td>
-		</tr>
-		<tr>
-		  <td>Country</td>
-		  <td>{{Person.Country}}</td>
-		</tr>
-		<tr>
-		  <td>State</td>
-		  <td>{{Person.State}}</td>
-		</tr>
-		<tr>
-		  <td>TimeZone</td>
-		  <td>{{Person.TimeZone}}</td>
-		</tr>
-		<tr>
-		  <td>Display Language</td>
-		  <td>{{Person.DisplayLanguage}}</td>
-		</tr>
+	<div class="infoHolder">
+		<table class="table-striped">
+			<tr>
+			  <td>Profile:</td>
+			  <td>{{synergyData.Person.FirstName}} {{synergyData.Person.LastName}}</td>
+			</tr>
+			<tr>
+			  <td>Primary Email:</td>
+			  <td>{{synergyData.Person.PrimaryEmail}}</td>
+			</tr>
+			{{#each synergyData.Person.SecondaryEmails}}
+			<tr>
+			  <td>Secondary Emails:</td>
+			  <td>{{.}}</td>
+			</tr>
+			{{/each}}
+			<tr>
+			  <td>Phone No:</td>
+			  <td>{{synergyData.Person.PhoneNumber}}</td>
+			</tr>
+			<tr>
+			  <td>Mobile No:</td>
+			  <td>{{synergyData.Person.MobileNumber}}</td>
+			</tr>
+			<tr>
+			  <td>Country</td>
+			  <td>{{synergyData.Person.Country}}</td>
+			</tr>
+			<tr>
+			  <td>State</td>
+			  <td>{{synergyData.Person.State}}</td>
+			</tr>
+			<tr>
+			  <td>TimeZone</td>
+			  <td>{{synergyData.Person.TimeZone}}</td>
+			</tr>
+			<tr>
+			  <td>Display Language</td>
+			  <td>{{synergyData.Person.DisplayLanguage}}</td>
+			</tr>
 
-	</table>
-</div>
-
-<h4>Organizations</h4>
-
-<div class="infoHolder">
-{{#each Company}}
-	<div class="genCompany" id="{{this.QuickLinks}}">
-		<p class="companyName">{{this.CompanyName}}</p>
-		<class="glyphicon glyphicon-plus"></i>
-		<i class="icon-plus {{this.QuickLinks}}mathSymbol"></i> 
+		</table>
 	</div>
-	
-	<div id="company" class="{{ this.QuickLinks}}">
-	<table class="table-striped">
-		<tr>
-		  <td>Company Type:</td>
-		  <td>{{this.CompanyType}}</td>
-		</tr>
-		<tr>
-		  <td>Product:</td>
-		  <td>{{this.Subscription.Product}}</td>
-		</tr>
-		<tr>
-		  <td>Amount of Users:</td>
-		  <td>{{this.Subscription.Users}}</td>
-		</tr>
-		<tr>
-		  <td>Storage:</td>
-		  <td>{{this.Subscription.Storage}}</td>
-		</tr>
-		<tr>
-		  <td>Expiration:</td>
-		  <td>{{this.Subscription.Expiry}}</td>
-		</tr>
-		<tr>
-		  <td>Expired:</td>
-		  <td>
-			{{#if this.Subscription.Expired}}
-				True
-			{{else}}
-				False
-			{{/if}}
-		  </td>
-		</tr>
-		<tr>
-		  <td>Skype:</td>
-		  <td>{{this.SkypeName}}</td>
-		</tr>
-		<tr>
-		  <td>Website:</td>
-		  <td>{{this.Website}}</td>
-		</tr>
-		<tr>
-		  <td>Phone:</td>
-		  <td>{{this.PhoneNumber}}</td>
-		</tr>
-		<tr>
-		  <td>Address:</td>
-		  <td>{{this.Address}}</td>
-		</tr>
-		<tr>
-		  <td>Country:</td>
-		  <td>{{this.Country}}</td>
-		</tr>
-		<tr>
-		  <td>Quick Link:</td>
-		  <td>{{this.QuickLinks}}</td>
-		</tr>
-	</table>
-</div>
-	
-{{/each}}
-</div>
+
+	<h4>Organizations</h4>
+
+	<div class="infoHolder">
+	{{#each synergyData.Company}}
+		<div class="genCompany" id="{{this.QuickLinks}}">
+			<p class="companyName">{{this.CompanyName}}</p>
+			<class="glyphicon glyphicon-plus"></i>
+			<i class="icon-plus {{this.QuickLinks}}mathSymbol"></i> 
+		</div>
+		
+		<div id="company" class="{{ this.QuickLinks}}">
+		<table class="table-striped">
+			<tr>
+			  <td>Company Type:</td>
+			  <td>{{this.CompanyType}}</td>
+			</tr>
+			<tr>
+			  <td>Product:</td>
+			  <td>{{this.Subscription.Product}}</td>
+			</tr>
+			<tr>
+			  <td>Amount of Users:</td>
+			  <td>{{this.Subscription.Users}}</td>
+			</tr>
+			<tr>
+			  <td>Storage:</td>
+			  <td>{{this.Subscription.Storage}}</td>
+			</tr>
+			<tr>
+			  <td>Expiration:</td>
+			  <td>{{this.Subscription.Expiry}}</td>
+			</tr>
+			<tr>
+			  <td>Expired:</td>
+			  <td>
+				{{#if this.Subscription.Expired}}
+					True
+				{{else}}
+					False
+				{{/if}}
+			  </td>
+			</tr>
+			<tr>
+			  <td>Skype:</td>
+			  <td>{{this.SkypeName}}</td>
+			</tr>
+			<tr>
+			  <td>Website:</td>
+			  <td>{{this.Website}}</td>
+			</tr>
+			<tr>
+			  <td>Phone:</td>
+			  <td>{{this.PhoneNumber}}</td>
+			</tr>
+			<tr>
+			  <td>Address:</td>
+			  <td>{{this.Address}}</td>
+			</tr>
+			<tr>
+			  <td>Country:</td>
+			  <td>{{this.Country}}</td>
+			</tr>
+			<tr>
+			  <td>Quick Link:</td>
+			  <td>{{this.QuickLinks}}</td>
+			</tr>
+		</table>
+	</div>
+		
+	{{/each}}
+	</div>
+{{/if}}
+
 
 {{#if CardNumber}}
 
@@ -128,7 +139,15 @@
 	
 	{{else}}
 		<button type="button" id="postCard" class="btn">Escalate Card</button>
-		
+		<p>Board: </p>
+		<select class="form-control" id="listSelect">
+			{{#each boards}}
+				<optgroup label="{{name}}">
+					{{#each lists}}
+					<option value={{listId}}>{{listName}}</option>
+					{{/each}}
+			{{/each}}
+		</select>
 {{/if}}
 
 {{#if Card}}
@@ -146,27 +165,41 @@
 		{{/each}}
 		</div>
 		<br>
-		<p class="trelloAttribute">Current State: </p><p class="trelloValue">{{Card.currentState}}</p><br>
-		<p class="trelloAttribute">{{Card.commenter}}: </p><p class="trelloValue">{{Card.comment}}</p><br>
+		<p class="trelloAttribute">Current Board: </p><p class="trelloValue">{{Card.board}}</p>
+		<br>
+		<p class="trelloAttribute">Current List: </p><p class="trelloValue">{{Card.currentState}}</p>
+		<br>
+		{{#if Card.comment}}
+			<p class="trelloAttribute">{{Card.commenter}}: </p><p class="trelloValue">{{Card.comment}}</p><br>
+		{{else}}
+			<p class="trelloAttribute">No Comments</p>
+		
+		{{/if}}
+		
 		<a href="{{Card.url}}" target="_blank" class="trelloValue">
 			<button type="button" class="btn" id="goToTrello">Open in Trello</button>
 		</a>
 	</div>
 {{/if}}
 
+{{#if noTrelloKey}}
 <div class="keyHolder2">
 	<input type="text" id="inputTrelloAuth" placeholder="Trello Auth Key">
 	<button type="button" id="submitAuthTrello" class="btn">Save Token</button>
 </div>
 
+<! -- add parameter name -- this will change it to total synergy is requesting -->
 <a href="https://trello.com/1/authorize?key=d04c9c2bd2be123721cdbf17f78f5c20&name=My+Application&expiration=30days&response_type=token&scope=read,write" target="_blank"> 
 	<button type="button" id="authorizeTrello" class="btn">Get Authorization Key</button>
 </a>
+{{/if}}
 
+{{#if noSynergyKey}}
 <div class="keyHolder">
 	<input type="text" id="inputKey" placeholder="Synergy 5 Key">
 	<button type="button" id="submitKey" class="btn">Submit</button>
 </div>
+{{/if}}
 
 
 

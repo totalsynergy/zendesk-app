@@ -1,6 +1,70 @@
-<p>There was a problem accessing the data.</p>
+{{#if errorMessage}}
+
+<p>There was a problem accessing the data wut.</p>
 
 <h4>{{message}}</h4>
+
+{{/if}}
+
+{{#if additional.CardNumber}}
+
+	<button type="button" id="getCard" class="btn">Get Card</button>
+	
+	{{else}}
+		<button type="button" id="postCard" class="btn">Escalate Card</button>
+		<p>Board: </p>
+		<select class="form-control" id="listSelect">
+			{{#each additional.boardInfo}}
+				<optgroup label="{{name}}">
+					{{#each lists}}
+					<option value={{listId}}>{{listName}}</option>
+					{{/each}}
+			{{/each}}
+		</select>
+		<p>List : 
+{{/if}}
+
+{{#if additional.Card}}
+	<div id="trelloHolder">
+		<h3 id="trelloName">{{additional.Card.name}}</h3>
+		{{#if additional.Card.closed}}
+			closed
+			{{else}}
+				<p id="trelloPercentage">{{additional.Card.percentage}}%</p>
+		{{/if}}
+		
+		<div id="labelHolder">
+		{{#each additional.Card.labels}}
+			<div id="trelloLabel" title="{{this.name}}" style="background: {{this.color}}"></div>
+		{{/each}}
+		</div>
+		<br>
+		<p class="trelloAttribute">Current Board: </p><p class="trelloValue">{{additional.sCard.board}}</p>
+		<br>
+		<p class="trelloAttribute">Current List: </p><p class="trelloValue">{{additional.Card.currentState}}</p>
+		<br>
+		{{#if Card.comment}}
+			<p class="trelloAttribute">{{additional.Card.commenter}}: </p><p class="trelloValue">{{additional.Card.comment}}</p><br>
+		{{else}}
+			<p class="trelloAttribute">No Comments</p>
+		
+		{{/if}}
+		
+		<a href="{{additional.Card.url}}" target="_blank" class="trelloValue">
+			<button type="button" class="btn" id="goToTrello">Open in Trello</button>
+		</a>
+	</div>
+{{/if}}
+
+<div class="keyHolder2">
+	<input type="text" id="inputTrelloAuth" placeholder="Trello Auth Key">
+	<button type="button" id="submitAuthTrello" class="btn">Save Token</button>
+</div>
+
+<a href="https://trello.com/1/authorize?key=d04c9c2bd2be123721cdbf17f78f5c20&name=My+Application&expiration=30days&response_type=token&scope=read,write" target="_blank"> 
+	<button type="button" id="authorizeTrello" class="btn">Get Authorization Key</button>
+</a>
+
 <div class="keyHolder">
 	<input type="text" id="inputKey" placeholder="Synergy 5 Key">
 	<button type="button" id="submitKey" class="btn">Submit</button>
