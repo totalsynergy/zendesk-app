@@ -183,6 +183,28 @@ td{
 	margin-bottom:10px;
 }
 
+#board{
+	display:inline;
+}
+
+#listSelect{
+	width:40%;
+}
+
+#boardSelectHolder{
+	width: 80%;
+	margin-left: 27%;
+	margin-top: 5%;
+}
+
 .thicker{
 	font-weight: bold;
+}
+
+.field{
+	font-weight:600;
+}
+
+tr{
+	height:35px;
 }

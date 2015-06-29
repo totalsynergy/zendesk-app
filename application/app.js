@@ -13,7 +13,7 @@
         listNames: [],
 		trelloBoards: [],
 		boardsInformation: [],
-		renderData: {},
+		renderData: {"noTrelloKey" : false},
 
         //Similar to callbacks in ajax requests
 		//Handle Callbacks in then() statement
@@ -130,13 +130,16 @@
 			this.renderData = {};
             this.ajax('getUserInfo', this.currentUser().id()).then(
                 function(data) {
-					console.log(" \n \n Field data: " + JSON.stringify(data));
 
                     var fields = data.user.user_fields;
-                    //console.log("Keys are: " + JSON.stringify(fields));
 
                     this.synergyKey = fields.synergy_5_key;
                     this.trelloAppKey = fields.trello_application_key;
+					
+					if(this.trelloAppKey && this.trelloAppKey !== ''){
+						this.renderData.trelloAppKey = this.trelloAppKey;
+					}
+					
                     this.trelloUserAuth = fields.trello_user_token;
 
                     this.getTicketImage();
@@ -184,7 +187,7 @@
                     //If email was found
                     if (data.data) {
 						
-						console.log("\n\n\n Successfully Got Synergy Data \n\n\n");
+						console.log("\n\n\n Successfully Got Synergy Data " + JSON.stringify(data) + "\n\n\n");
                         //Append Zendesk User info such as photo
                         var successData = data.data;
 						
@@ -227,11 +230,17 @@
 					
 					//Trello User Auth worked so do not display the ability to enter this
 					this.renderData.noTrelloKey = false;
+					this.noTrelloKey = false;
 				},
 				function(error)
 				{
 					this.noTrelloKey = true;
-					console.log("Failed member token fetch: " + JSON.stringify(error));					
+					console.log("Failed member token fetch: " + JSON.stringify(error));
+					
+					//Trello User Auth Did Not Work
+					this.renderData.noTrelloKey = true;
+					
+					this.showInfo();
 				}
 			);
 		},
@@ -455,7 +464,7 @@
                 //Could Not Get Trello Card - show error
                 function(error) {
                     this.$("#trelloError").empty();
-                    this.$("#getCard").after("<div id='trelloError'>Trello Card Number Cannot Be Found, Likely Deleted.<br>Reset the trelloCardNumber on the left panel if you wish to escalate card again!</div>");
+                    this.$("#getCard").after("<div id='trelloError'>Trello Card Number Cannot Be Found.<br>It has likely been deleted. Please reset the trelloCardNumber on the left panel if you wish to escalate the card again.</div>");
                     this.$("#getCard").hide();
                     this.$("#postCard").show();
                     console.log("Failed to get TrelloCard");

@@ -18,41 +18,41 @@
 	<div class="infoHolder">
 		<table class="table-striped">
 			<tr>
-			  <td>Profile:</td>
+			  <td class="field">Profile:</td>
 			  <td>{{synergyData.Person.FirstName}} {{synergyData.Person.LastName}}</td>
 			</tr>
 			<tr>
-			  <td>Primary Email:</td>
+			  <td class="field">Primary Email:</td>
 			  <td>{{synergyData.Person.PrimaryEmail}}</td>
 			</tr>
 			{{#each synergyData.Person.SecondaryEmails}}
 			<tr>
-			  <td>Secondary Emails:</td>
-			  <td>{{.}}</td>
+			  <td class="field">Secondary</td>
+				<td>{{.}}</td>
+			  {{/each}}
 			</tr>
-			{{/each}}
 			<tr>
-			  <td>Phone No:</td>
+			  <td class="field">Phone No:</td>
 			  <td>{{synergyData.Person.PhoneNumber}}</td>
 			</tr>
 			<tr>
-			  <td>Mobile No:</td>
+			  <td class="field">Mobile No:</td>
 			  <td>{{synergyData.Person.MobileNumber}}</td>
 			</tr>
 			<tr>
-			  <td>Country</td>
+			  <td class="field">Country</td>
 			  <td>{{synergyData.Person.Country}}</td>
 			</tr>
 			<tr>
-			  <td>State</td>
+			  <td class="field">State</td>
 			  <td>{{synergyData.Person.State}}</td>
 			</tr>
 			<tr>
-			  <td>TimeZone</td>
+			  <td class="field">Time Zone</td>
 			  <td>{{synergyData.Person.TimeZone}}</td>
 			</tr>
 			<tr>
-			  <td>Display Language</td>
+			  <td class="field">Language</td>
 			  <td>{{synergyData.Person.DisplayLanguage}}</td>
 			</tr>
 
@@ -72,27 +72,27 @@
 		<div id="company" class="{{ this.QuickLinks}}">
 		<table class="table-striped">
 			<tr>
-			  <td>Company Type:</td>
+			  <td class="field">Company Type:</td>
 			  <td>{{this.CompanyType}}</td>
 			</tr>
 			<tr>
-			  <td>Product:</td>
+			  <td class="field">Product:</td>
 			  <td>{{this.Subscription.Product}}</td>
 			</tr>
 			<tr>
-			  <td>Amount of Users:</td>
+			  <td class="field">Amount of Users:</td>
 			  <td>{{this.Subscription.Users}}</td>
 			</tr>
 			<tr>
-			  <td>Storage:</td>
+			  <td class="field">Storage:</td>
 			  <td>{{this.Subscription.Storage}}</td>
 			</tr>
 			<tr>
-			  <td>Expiration:</td>
+			  <td class="field">Expiration:</td>
 			  <td>{{this.Subscription.Expiry}}</td>
 			</tr>
 			<tr>
-			  <td>Expired:</td>
+			  <td class="field">Expired:</td>
 			  <td>
 				{{#if this.Subscription.Expired}}
 					True
@@ -102,28 +102,28 @@
 			  </td>
 			</tr>
 			<tr>
-			  <td>Skype:</td>
+			  <td class="field">Skype:</td>
 			  <td>{{this.SkypeName}}</td>
 			</tr>
 			<tr>
-			  <td>Website:</td>
+			  <td class="field">Website:</td>
 			  <td>{{this.Website}}</td>
 			</tr>
 			<tr>
-			  <td>Phone:</td>
+			  <td class="field">Phone:</td>
 			  <td>{{this.PhoneNumber}}</td>
 			</tr>
 			<tr>
-			  <td>Address:</td>
+			  <td class="field">Address:</td>
 			  <td>{{this.Address}}</td>
 			</tr>
 			<tr>
-			  <td>Country:</td>
+			  <td class="field">Country:</td>
 			  <td>{{this.Country}}</td>
 			</tr>
 			<tr>
-			  <td>Quick Link:</td>
-			  <td>{{this.QuickLinks}}</td>
+			  <td class="field">Quick Link:</td>
+			  <td><a href="https://beta.totalsynergy.com/Organisation/{{this.QuickLinks}}" target="_blank">{{this.QuickLinks}}</td>
 			</tr>
 		</table>
 	</div>
@@ -132,71 +132,81 @@
 	</div>
 {{/if}}
 
+<h4>Trello</h4>
 
-{{#if CardNumber}}
+<div class="infoHolder">
 
-	<button type="button" id="getCard" class="btn">Get Card</button>
-	
-	{{else}}
-		<button type="button" id="postCard" class="btn">Escalate Card</button>
-		<p>Board: </p>
-		<select class="form-control" id="listSelect">
-			{{#each boards}}
-				<optgroup label="{{name}}">
-					{{#each lists}}
-					<option value={{listId}}>{{listName}}</option>
-					{{/each}}
-			{{/each}}
-		</select>
-{{/if}}
+{{#unless noTrelloKey}}
+	{{#if CardNumber}}
 
-{{#if Card}}
-	<div id="trelloHolder">
-		<h3 id="trelloName">{{Card.name}}</h3>
-		{{#if Card.closed}}
-			closed
-			{{else}}
-				<p id="trelloPercentage">{{Card.percentage}}%</p>
-		{{/if}}
+		<button type="button" id="getCard" class="btn">Get Card</button>
 		
-		<div id="labelHolder">
-		{{#each Card.labels}}
-			<div id="trelloLabel" title="{{this.name}}" style="background: {{this.color}}"></div>
-		{{/each}}
-		</div>
-		<br>
-		<p class="trelloAttribute">Current Board: </p><p class="trelloValue">{{Card.board}}</p>
-		<br>
-		<p class="trelloAttribute">Current List: </p><p class="trelloValue">{{Card.currentState}}</p>
-		<br>
-		{{#if Card.comment}}
-			<p class="trelloAttribute">{{Card.commenter}}: </p><p class="trelloValue">{{Card.comment}}</p><br>
 		{{else}}
-			<p class="trelloAttribute">No Comments</p>
-		
-		{{/if}}
-		
-		<a href="{{Card.url}}" target="_blank" class="trelloValue">
-			<button type="button" class="btn" id="goToTrello">Open in Trello</button>
-		</a>
-	</div>
-{{/if}}
+			<button type="button" id="postCard" class="btn">Escalate Card</button>
+			<div id = "boardSelectHolder">
+			<p id="board">Board: </p>
+			<select class="form-control" id="listSelect">
+				{{#each boards}}
+					<optgroup label="{{name}}">
+						{{#each lists}}
+						<option value={{listId}}>{{listName}}</option>
+						{{/each}}
+				{{/each}}
+			</select>
+			</div>
+	{{/if}}
 
-{{#if noTrelloKey}}
-<div class="keyHolder2">
-	<input type="text" id="inputTrelloAuth" placeholder="Trello Auth Key">
-	<button type="button" id="submitAuthTrello" class="btn">Save Token</button>
+	{{#if Card}}
+		<div id="trelloHolder">
+			<h3 id="trelloName">{{Card.name}}</h3>
+			{{#if Card.closed}}
+				closed
+				{{else}}
+					<p id="trelloPercentage">{{Card.percentage}}%</p>
+			{{/if}}
+			
+			<div id="labelHolder">
+			{{#each Card.labels}}
+				<div id="trelloLabel" title="{{this.name}}" style="background: {{this.color}}"></div>
+			{{/each}}
+			</div>
+			<br>
+			<p class="trelloAttribute">Current Board: </p><p class="trelloValue">{{Card.board}}</p>
+			<br>
+			<p class="trelloAttribute">Current List: </p><p class="trelloValue">{{Card.currentState}}</p>
+			<br>
+			{{#if Card.comment}}
+				<p class="trelloAttribute">{{Card.commenter}}: </p><p class="trelloValue">{{Card.comment}}</p><br>
+			{{else}}
+				<p class="trelloAttribute">No Comments</p>
+			
+			{{/if}}
+			
+			<a href="{{Card.url}}" target="_blank" class="trelloValue">
+				<button type="button" class="btn" id="goToTrello">Open in Trello</button>
+			</a>
+		</div>
+	{{/if}}
+{{/unless}}
+
+	{{#if noTrelloKey}}
+	<div class="keyHolder2">
+		<input type="text" id="inputTrelloAuth" placeholder="Trello Auth Key">
+		<button type="button" id="submitAuthTrello" class="btn">Save Token</button>
+	</div>
+	<! -- add parameter name -- this will change it to total synergy is requesting -->
+	<a href="https://trello.com/1/authorize?key={{trelloAppKey}}&name=Synergy+Zen+Desk&expiration=never&response_type=token&scope=read,write" target="_blank"> 
+		<button type="button" id="authorizeTrello" class="btn">Get Authorization Key</button>
+	</a>
+	{{/if}}
+
 </div>
 
-<! -- add parameter name -- this will change it to total synergy is requesting -->
-<a href="https://trello.com/1/authorize?key=d04c9c2bd2be123721cdbf17f78f5c20&name=My+Application&expiration=30days&response_type=token&scope=read,write" target="_blank"> 
-	<button type="button" id="authorizeTrello" class="btn">Get Authorization Key</button>
-</a>
-{{/if}}
 
 {{#if noSynergyKey}}
+<h4>Synergy Key & Trello Application</h4>
 <div class="keyHolder">
-	<input type="text" id="inputKey" placeholder="Synergy 5 Key">
+	<input type="text" id="inputKey" placeholder="Synergy Daily Code">
 	<button type="button" id="submitKey" class="btn">Submit</button>
 </div>
 {{/if}}
