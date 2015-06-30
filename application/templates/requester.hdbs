@@ -14,11 +14,11 @@
 </header>
 
 {{#if synergyData.Person}}
-<h4>Personal</h4>
+<h4>User Profile</h4>
 	<div class="infoHolder">
 		<table class="table-striped">
 			<tr>
-			  <td class="field">Profile:</td>
+			  <td class="field">User:</td>
 			  <td>{{synergyData.Person.FirstName}} {{synergyData.Person.LastName}}</td>
 			</tr>
 			<tr>
@@ -27,7 +27,7 @@
 			</tr>
 			{{#each synergyData.Person.SecondaryEmails}}
 			<tr>
-			  <td class="field">Secondary</td>
+			  <td class="field">Secondary:</td>
 				<td>{{.}}</td>
 			  {{/each}}
 			</tr>
@@ -40,19 +40,19 @@
 			  <td>{{synergyData.Person.MobileNumber}}</td>
 			</tr>
 			<tr>
-			  <td class="field">Country</td>
+			  <td class="field">Country:</td>
 			  <td>{{synergyData.Person.Country}}</td>
 			</tr>
 			<tr>
-			  <td class="field">State</td>
+			  <td class="field">State:</td>
 			  <td>{{synergyData.Person.State}}</td>
 			</tr>
 			<tr>
-			  <td class="field">Time Zone</td>
+			  <td class="field">Time Zone:</td>
 			  <td>{{synergyData.Person.TimeZone}}</td>
 			</tr>
 			<tr>
-			  <td class="field">Language</td>
+			  <td class="field">Language:</td>
 			  <td>{{synergyData.Person.DisplayLanguage}}</td>
 			</tr>
 
@@ -123,7 +123,7 @@
 			</tr>
 			<tr>
 			  <td class="field">Quick Link:</td>
-			  <td><a href="https://beta.totalsynergy.com/Organisation/{{this.QuickLinks}}" target="_blank">{{this.QuickLinks}}</td>
+			  <td><a href="https://beta.totalsynergy.com/Organisation/{{this.Quick}}" target="_blank">{{this.Quick}}</td>
 			</tr>
 		</table>
 	</div>

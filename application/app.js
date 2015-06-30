@@ -186,10 +186,17 @@
                 function(data) {
                     //If email was found
                     if (data.data) {
-						
+				
 						console.log("\n\n\n Successfully Got Synergy Data " + JSON.stringify(data) + "\n\n\n");
                         //Append Zendesk User info such as photo
                         var successData = data.data;
+						
+						//Quick Links issue
+						for(var i = 0; i < data.data.Company.length; i++){
+							
+							var formattedQuickLinks = data.data.Company[i].QuickLinks.slice(8);
+							successData.Company[i].Quick = formattedQuickLinks;
+						}
 						
 						this.renderData.synergyData = successData;
 
@@ -320,6 +327,8 @@
                 dataToPass.CardNumber = true;
 				console.log("  \n \n Trello Card Number is not empty: " + this.ticket().customField("custom_field_22941890"));
 			}
+			
+			console.log("\n\n do we need to get trello stuff ???? : " + dataToPass.noTrelloKey);
 			
 			console.log("\n \n \n Showing Info\n \n \n");
             this.switchTo('requester', dataToPass);
